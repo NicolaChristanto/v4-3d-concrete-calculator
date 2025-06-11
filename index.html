@@ -315,7 +315,7 @@
             color: white;
         }
 
-        /* Specific styles for summary table cells within a div */
+        /* Styles for summary table cells (display mode) */
         .summary-section tbody td {
             padding: 0; /* Remove padding from cell itself */
             vertical-align: middle; /* Vertically align content in the middle */
@@ -335,18 +335,18 @@
             color: #333333; /* Default dark color */
         }
 
-        /* Specifically align description in summary table to left */
+        /* Specifically align description in summary table to left (display mode) */
         .summary-section tbody td:nth-child(2) > div {
             justify-content: flex-start; /* Align description to the left */
         }
 
-        /* Adjustments for Percentage column in summary table */
+        /* Adjustments for Percentage column in summary table (display mode) */
         .summary-section td.calculated[id$="_percentage"] > div {
             justify-content: flex-end; /* Align percentage to the right */
             font-weight: bold;
         }
 
-        /* Override for total row calculated values in summary table */
+        /* Override for total row calculated values in summary table (display mode) */
         .summary-section .total-row td > div {
             color: #1A202C; /* Changed from white to a very dark gray for better contrast */
         }
@@ -496,27 +496,38 @@
                 width: auto !important; /* Allow content to dictate width */
             }
 
-            /* For calculated div inside summary table, these should now be directly on the td */
-            .summary-section tbody td > div {
-                display: inline !important; /* Change back to inline for better flow after moving text-align to td */
-                padding: 0 !important; /* No padding from div itself */
-                box-sizing: content-box !important; /* Reset to default */
-                white-space: normal !important; /* Allow wrapping */
-                overflow: visible !important; /* Ensure visible */
+            /* For calculated div inside summary table, these rules are now removed as div is gone */
+            /* The previous rules for .summary-section tbody td > div are now explicitly removed to prevent conflicts */
+            /* Instead, text-align is applied directly to the td element */
+            .summary-section tbody td > div { /* This rule is kept to explicitly override previous non-print styles */
+                display: initial !important; /* Revert to default display for text inside td for print */
+                padding: 0 !important; /* Remove any padding from the div */
+                box-sizing: content-box !important; /* Reset box-sizing */
+                white-space: normal !important; /* Allow text wrapping */
+                overflow: visible !important; /* Ensure content is not hidden */
                 text-overflow: clip !important; /* No ellipsis */
-                color: #000 !important; /* Ensure text is black for print */
+                color: #000 !important; /* Black text */
             }
 
             /* Tables */
             table {
                 break-inside: avoid; /* Avoid breaking tables across pages */
                 page-break-inside: avoid; /* For older browsers */
+                width: 100%; /* Ensure table takes full width */
             }
+            /* Avoid page breaks inside table rows */
+            table tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
             th, td {
                 border-color: #ccc !important; /* Lighter borders for print */
                 padding: 8px !important; /* Uniform padding for print */
                 vertical-align: top !important; /* Align content to top within cell */
+                color: #000 !important; /* Ensure text is black for print */
             }
+
             /* Header specific alignment for print */
             .summary-section table th {
                 text-align: center !important; /* Center align headers as seen in image */
@@ -524,19 +535,21 @@
                 color: white !important;
             }
 
-            /* Apply explicit widths to table cells directly for print */
+            /* Apply explicit widths and text-align directly to td for print */
             .summary-section table th:nth-child(1) { width: 18% !important; } /* Category */
-            .summary-section table th:nth-child(2) { width: 32% !important; } /* Description */
-            .summary-section table th:nth-child(3) { width: 18% !important; } /* Cost per m³ */
-            .summary-section table th:nth-child(4) { width: 18% !important; } /* Project Total */
-            .summary-section table th:nth-child(5) { width: 14% !important; } /* Percentage */
+            .summary-section table td:nth-child(1) { width: 18% !important; text-align: left !important; }
 
-            /* Now applying text-align directly to td for print as well */
-            .summary-section table td:nth-child(1) { text-align: left !important; } /* Category */
-            .summary-section table td:nth-child(2) { text-align: left !important; } /* Description */
-            .summary-section table td:nth-child(3) { text-align: right !important; } /* Cost per m³ */
-            .summary-section table td:nth-child(4) { text-align: right !important; } /* Project Total */
-            .summary-section table td:nth-child(5) { text-align: right !important; } /* Percentage */
+            .summary-section table th:nth-child(2) { width: 32% !important; } /* Description */
+            .summary-section table td:nth-child(2) { width: 32% !important; text-align: left !important; white-space: normal !important; } /* Allow wrapping for description */
+
+            .summary-section table th:nth-child(3) { width: 18% !important; } /* Cost per m³ */
+            .summary-section table td:nth-child(3) { width: 18% !important; text-align: right !important; }
+
+            .summary-section table th:nth-child(4) { width: 18% !important; } /* Project Total */
+            .summary-section table td:nth-child(4) { width: 18% !important; text-align: right !important; }
+
+            .summary-section table th:nth-child(5) { width: 14% !important; } /* Percentage */
+            .summary-section table td:nth-child(5) { width: 14% !important; text-align: right !important; }
 
 
             /* Ensure total row text color is black and follows alignment */
@@ -545,9 +558,7 @@
                 font-weight: bold !important; /* Keep bold for totals */
             }
             /* The div within total-row td should also follow the td's text-align now */
-            .summary-section .total-row td > div {
-                text-align: inherit !important; /* Inherit text alignment from parent td */
-            }
+            /* As the div is removed, this specific rule for div is not needed. Text is directly in td. */
 
 
             /* Specific fix for Project Name display in print */
@@ -1728,4 +1739,3 @@
     </script>
 </body>
 </html>
-
