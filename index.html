@@ -496,28 +496,16 @@
                 width: auto !important; /* Allow content to dictate width */
             }
 
-            /* For calculated div inside summary table, ensure it's forced into the right alignment */
+            /* For calculated div inside summary table, these should now be directly on the td */
             .summary-section tbody td > div {
-                display: block !important; /* Use block for print to simplify alignment */
+                display: inline !important; /* Change back to inline for better flow after moving text-align to td */
                 padding: 0 !important; /* No padding from div itself */
-                box-sizing: border-box !important;
+                box-sizing: content-box !important; /* Reset to default */
                 white-space: normal !important; /* Allow wrapping */
                 overflow: visible !important; /* Ensure visible */
                 text-overflow: clip !important; /* No ellipsis */
                 color: #000 !important; /* Ensure text is black for print */
             }
-
-            /* Specifically align content within div based on column for print */
-            .summary-section td:nth-child(1) > div,
-            .summary-section td:nth-child(2) > div {
-                text-align: left !important; /* Align Category and Description left */
-            }
-            .summary-section td:nth-child(3) > div,
-            .summary-section td:nth-child(4) > div,
-            .summary-section td:nth-child(5) > div {
-                text-align: right !important; /* Align numeric columns right */
-            }
-
 
             /* Tables */
             table {
@@ -537,10 +525,6 @@
             }
 
             /* Apply explicit widths to table cells directly for print */
-            /* Removed this block, relying on table-layout: fixed and the th widths set directly for print */
-            /* This is a crucial change to avoid potential conflicts with browser print engines */
-
-            /* Re-applying widths more directly for print to the th elements, and letting td inherit */
             .summary-section table th:nth-child(1) { width: 18% !important; } /* Category */
             .summary-section table th:nth-child(2) { width: 32% !important; } /* Description */
             .summary-section table th:nth-child(3) { width: 18% !important; } /* Cost per m³ */
@@ -1108,44 +1092,44 @@
                         <tr>
                             <td>3D Printer</td>
                             <td id="selected_printer_summary">Not Selected</td>
-                            <td class="calculated" id="printer_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="printer_project_total"><div>0</div></td>
-                            <td class="calculated" id="printer_percentage"><div>0%</div></td>
+                            <td class="calculated" id="printer_per_cubic">0</td>
+                            <td class="calculated" id="printer_project_total">0</td>
+                            <td class="calculated" id="printer_percentage">0%</td>
                         </tr>
                         <tr>
                             <td>Equipment & Rentals</td>
                             <td>Additional equipment and tools</td>
-                            <td class="calculated" id="equipment_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="equipment_project_total"><div>0</div></td>
-                            <td class="calculated" id="equipment_percentage"><div>0%</div></td>
+                            <td class="calculated" id="equipment_per_cubic">0</td>
+                            <td class="calculated" id="equipment_project_total">0</td>
+                            <td class="calculated" id="equipment_percentage">0%</td>
                         </tr>
                         <tr>
                             <td>Raw Materials</td>
                             <td>Concrete mix components</td>
-                            <td class="calculated" id="materials_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="materials_project_total"><div>0</div></td>
-                            <td class="calculated" id="materials_percentage"><div>0%</div></td>
+                            <td class="calculated" id="materials_per_cubic">0</td>
+                            <td class="calculated" id="materials_project_total">0</td>
+                            <td class="calculated" id="materials_percentage">0%</td>
                         </tr>
                         <tr>
                             <td>Labor</td>
                             <td>Workers and supervision</td>
-                            <td class="calculated" id="labor_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="labor_project_total"><div>0</div></td>
-                            <td class="calculated" id="labor_percentage"><div>0%</div></td>
+                            <td class="calculated" id="labor_per_cubic">0</td>
+                            <td class="calculated" id="labor_project_total">0</td>
+                            <td class="calculated" id="labor_percentage">0%</td>
                         </tr>
                         <tr>
                             <td>Reinforcement</td>
                             <td>Steel bars and accessories</td>
-                            <td class="calculated" id="rebar_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="rebar_project_total"><div>0</div></td>
-                            <td class="calculated" id="rebar_percentage"><div>0%</div></td>
+                            <td class="calculated" id="rebar_per_cubic">0</td>
+                            <td class="calculated" id="rebar_project_total">0</td>
+                            <td class="calculated" id="rebar_percentage">0%</td>
                         </tr>
                         <tr class="total-row">
                             <td><strong>PROJECT TOTAL</strong></td>
                             <td><strong>Complete 3D Printed Structure</strong></td>
-                            <td class="calculated" id="grand_total_per_cubic"><div>0</div></td>
-                            <td class="calculated" id="grand_total_project"><div>0</div></td>
-                            <td class="calculated" id="grand_total_percentage"><div>100%</div></td>
+                            <td class="calculated" id="grand_total_per_cubic">0</td>
+                            <td class="calculated" id="grand_total_project">0</td>
+                            <td class="calculated" id="grand_total_percentage">100%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1682,27 +1666,27 @@
 
             // Update summary table
             // Ensure division by total_volume is safe (if volume > 0)
-            document.getElementById('printer_per_cubic').querySelector('div').textContent = formatRupiah(printer_cost / (total_volume > 0 ? total_volume : 1));
-            document.getElementById('printer_project_total').querySelector('div').textContent = formatRupiah(printer_cost);
+            document.getElementById('printer_per_cubic').textContent = formatRupiah(printer_cost / (total_volume > 0 ? total_volume : 1));
+            document.getElementById('printer_project_total').textContent = formatRupiah(printer_cost);
 
-            document.getElementById('equipment_per_cubic').querySelector('div').textContent = formatRupiah(equipment_total / (total_volume > 0 ? total_volume : 1));
-            document.getElementById('equipment_project_total').querySelector('div').textContent = formatRupiah(equipment_total);
+            document.getElementById('equipment_per_cubic').textContent = formatRupiah(equipment_total / (total_volume > 0 ? total_volume : 1));
+            document.getElementById('equipment_project_total').textContent = formatRupiah(equipment_total);
 
             // For materials, the 'materials_total' from the function is already the project total.
             // materials_per_cubic needs to be calculated by dividing the project total materials cost by the input total_volume.
-            document.getElementById('materials_per_cubic').querySelector('div').textContent = formatRupiah(materials_total / (total_volume > 0 ? total_volume : 1)); 
-            document.getElementById('materials_project_total').querySelector('div').textContent = formatRupiah(materials_total);
+            document.getElementById('materials_per_cubic').textContent = formatRupiah(materials_total / (total_volume > 0 ? total_volume : 1)); 
+            document.getElementById('materials_project_total').textContent = formatRupiah(materials_total);
 
-            document.getElementById('labor_per_cubic').querySelector('div').textContent = formatRupiah(labor_total / (total_volume > 0 ? total_volume : 1));
-            document.getElementById('labor_project_total').querySelector('div').textContent = formatRupiah(labor_total); 
+            document.getElementById('labor_per_cubic').textContent = formatRupiah(labor_total / (total_volume > 0 ? total_volume : 1));
+            document.getElementById('labor_project_total').textContent = formatRupiah(labor_total); 
 
             // For rebar, the 'rebar_total' from the function is already the project total.
             // rebar_per_cubic needs to be calculated by dividing the project total rebar cost by the input total_volume.
-            document.getElementById('rebar_per_cubic').querySelector('div').textContent = formatRupiah(rebar_total / (total_volume > 0 ? total_volume : 1));
-            document.getElementById('rebar_project_total').querySelector('div').textContent = formatRupiah(rebar_total);
+            document.getElementById('rebar_per_cubic').textContent = formatRupiah(rebar_total / (total_volume > 0 ? total_volume : 1));
+            document.getElementById('rebar_project_total').textContent = formatRupiah(rebar_total);
 
-            document.getElementById('grand_total_per_cubic').querySelector('div').textContent = formatRupiah(cost_per_cubic);
-            document.getElementById('grand_total_project').querySelector('div').textContent = formatRupiah(grand_total_project);
+            document.getElementById('grand_total_per_cubic').textContent = formatRupiah(cost_per_cubic);
+            document.getElementById('grand_total_project').textContent = formatRupiah(grand_total_project);
 
             // Calculate percentages
             updatePercentages(grand_total_project, printer_cost, equipment_total, materials_total, labor_total, rebar_total);
@@ -1711,21 +1695,21 @@
         // Function to update percentages in the summary table
         function updatePercentages(grandTotal, printerCost, equipmentCost, materialsCost, laborCost, rebarCost) {
             if (grandTotal === 0) {
-                document.getElementById('printer_percentage').querySelector('div').textContent = '0%';
-                document.getElementById('equipment_percentage').querySelector('div').textContent = '0%';
-                document.getElementById('materials_percentage').querySelector('div').textContent = '0%';
-                document.getElementById('labor_percentage').querySelector('div').textContent = '0%';
-                document.getElementById('rebar_percentage').querySelector('div').textContent = '0%';
-                document.getElementById('grand_total_percentage').querySelector('div').textContent = '0%'; 
+                document.getElementById('printer_percentage').textContent = '0%';
+                document.getElementById('equipment_percentage').textContent = '0%';
+                document.getElementById('materials_percentage').textContent = '0%';
+                document.getElementById('labor_percentage').textContent = '0%';
+                document.getElementById('rebar_percentage').textContent = '0%';
+                document.getElementById('grand_total_percentage').textContent = '0%'; 
                 return;
             }
 
-            document.getElementById('printer_percentage').querySelector('div').textContent = ((printerCost / grandTotal) * 100).toFixed(1) + '%';
-            document.getElementById('equipment_percentage').querySelector('div').textContent = ((equipmentCost / grandTotal) * 100).toFixed(1) + '%';
-            document.getElementById('materials_percentage').querySelector('div').textContent = ((materialsCost / grandTotal) * 100).toFixed(1) + '%';
-            document.getElementById('labor_percentage').querySelector('div').textContent = ((laborCost / grandTotal) * 100).toFixed(1) + '%';
-            document.getElementById('rebar_percentage').querySelector('div').textContent = ((rebarCost / grandTotal) * 100).toFixed(1) + '%';
-            document.getElementById('grand_total_percentage').querySelector('div').textContent = '100%'; 
+            document.getElementById('printer_percentage').textContent = ((printerCost / grandTotal) * 100).toFixed(1) + '%';
+            document.getElementById('equipment_percentage').textContent = ((equipmentCost / grandTotal) * 100).toFixed(1) + '%';
+            document.getElementById('materials_percentage').textContent = ((materialsCost / grandTotal) * 100).toFixed(1) + '%';
+            document.getElementById('labor_percentage').textContent = ((laborCost / grandTotal) * 100).toFixed(1) + '%';
+            document.getElementById('rebar_percentage').textContent = ((rebarCost / grandTotal) * 100).toFixed(1) + '%';
+            document.getElementById('grand_total_percentage').textContent = '100%'; 
         }
 
         // Initialize calculations on page load
@@ -1744,3 +1728,4 @@
     </script>
 </body>
 </html>
+
