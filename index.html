@@ -316,6 +316,7 @@
         }
 
         /* Styles for summary table cells (display mode) */
+        /* These rules are for SCREEN display mode only */
         .summary-section tbody td {
             padding: 0; /* Remove padding from cell itself */
             vertical-align: middle; /* Vertically align content in the middle */
@@ -496,18 +497,10 @@
                 width: auto !important; /* Allow content to dictate width */
             }
 
-            /* For calculated div inside summary table, these rules are now removed as div is gone */
-            /* The previous rules for .summary-section tbody td > div are now explicitly removed to prevent conflicts */
-            /* Instead, text-align is applied directly to the td element */
-            .summary-section tbody td > div { /* This rule is kept to explicitly override previous non-print styles */
-                display: initial !important; /* Revert to default display for text inside td for print */
-                padding: 0 !important; /* Remove any padding from the div */
-                box-sizing: content-box !important; /* Reset box-sizing */
-                white-space: normal !important; /* Allow text wrapping */
-                overflow: visible !important; /* Ensure content is not hidden */
-                text-overflow: clip !important; /* No ellipsis */
-                color: #000 !important; /* Black text */
-            }
+            /* REMOVED: Styles for div inside td within summary table for print */
+            /* These rules should no longer be needed as the div is removed from HTML for print summary table */
+            /* .summary-section tbody td > div { ... } */
+
 
             /* Tables */
             table {
@@ -517,8 +510,15 @@
             }
             /* Avoid page breaks inside table rows */
             table tr {
-                page-break-inside: avoid;
-                break-inside: avoid;
+                page-break-inside: avoid !important; /* Force rows to stay together */
+                break-inside: avoid !important; /* For newer browsers */
+            }
+
+            /* Force sections to avoid breaking, keeping header with its content */
+            .section {
+                page-break-inside: avoid !important;
+                page-break-before: auto !important; /* Allow break before if it fits, otherwise push to next page */
+                break-inside: avoid !important;
             }
 
             th, td {
@@ -557,8 +557,7 @@
                 color: #000 !important; /* Ensure total text is black */
                 font-weight: bold !important; /* Keep bold for totals */
             }
-            /* The div within total-row td should also follow the td's text-align now */
-            /* As the div is removed, this specific rule for div is not needed. Text is directly in td. */
+            /* As the div is removed, no specific rule for div within total-row td is needed. Text is directly in td. */
 
 
             /* Specific fix for Project Name display in print */
@@ -1448,8 +1447,8 @@
                     
                     const rowTotal = length * pricePerMeter; // Calculate total cost (length * price, NOT scaled by total_volume)
                     
-                    if (calculatedCell) {
-                        calculatedCell.textContent = formatRupiah(rowTotal); // Update the calculated cell
+                    if (calculatedCell) { // Ensure the element exists
+                        calculatedCell.textContent = formatRupiah(rowTotal);
                     }
                     totalCost += rowTotal;
                 } else {
@@ -1729,7 +1728,7 @@
             // Select the first printer's first option by default for immediate functionality
             selectPrinter(PRINTERS[0].name, 0, 0); 
             // The initial state of checkboxes will be 'checked' by default.
-            // When calculateAll() runs on load, it will use these checked states.
+            // When calculateAll() runs on load, it. will use these checked states.
             updateProjectNameForPrint(); // Initial update for project name
             updateTotalColspan('materials_tbody');
             updateTotalColspan('rebar_tbody');
@@ -1739,3 +1738,4 @@
     </script>
 </body>
 </html>
+
