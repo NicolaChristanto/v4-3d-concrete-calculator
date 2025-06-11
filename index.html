@@ -496,25 +496,28 @@
                 width: auto !important; /* Allow content to dictate width */
             }
 
-            /* For calculated div inside summary table, ensure it's still flex-end */
+            /* For calculated div inside summary table, ensure it's forced into the right alignment */
             .summary-section tbody td > div {
-                display: flex !important;
-                justify-content: flex-end !important;
-                align-items: center !important;
-                width: 100% !important;
-                height: auto !important; /* Auto height to prevent cutting off */
+                display: block !important; /* Use block for print to simplify alignment */
                 padding: 0 !important; /* No padding from div itself */
                 box-sizing: border-box !important;
-                white-space: normal !important; /* Allow wrapping if needed */
+                white-space: normal !important; /* Allow wrapping */
                 overflow: visible !important; /* Ensure visible */
                 text-overflow: clip !important; /* No ellipsis */
-                color: #000 !important;
+                color: #000 !important; /* Ensure text is black for print */
             }
 
-            /* Specifically align description in summary table to left for print */
-            .summary-section tbody td:nth-child(2) > div {
-                justify-content: flex-start !important;
+            /* Specifically align content within div based on column for print */
+            .summary-section td:nth-child(1) > div,
+            .summary-section td:nth-child(2) > div {
+                text-align: left !important; /* Align Category and Description left */
             }
+            .summary-section td:nth-child(3) > div,
+            .summary-section td:nth-child(4) > div,
+            .summary-section td:nth-child(5) > div {
+                text-align: right !important; /* Align numeric columns right */
+            }
+
 
             /* Tables */
             table {
@@ -524,16 +527,31 @@
             th, td {
                 border-color: #ccc !important; /* Lighter borders for print */
                 padding: 8px !important; /* Uniform padding for print */
+                vertical-align: top !important; /* Align content to top within cell */
             }
-            th {
-                background-color: #f0f0f0 !important; /* Lighter header background */
-                color: #000 !important;
+            /* Header specific alignment for print */
+            .summary-section table th {
+                text-align: center !important; /* Center align headers as seen in image */
+                background-color: #7E74D4 !important; /* Maintain original summary header color for print */
+                color: white !important;
             }
-            .total-row {
-                background-color: #e0e0e0 !important; /* Lighter total row background */
-            }
+
+            /* Apply explicit widths to table cells directly for print */
+            .summary-section table th:nth-child(1),
+            .summary-section table td:nth-child(1) { width: 18% !important; } /* Category */
+            .summary-section table th:nth-child(2),
+            .summary-section table td:nth-child(2) { width: 32% !important; } /* Description */
+            .summary-section table th:nth-child(3),
+            .summary-section table td:nth-child(3) { width: 18% !important; } /* Cost per m³ */
+            .summary-section table th:nth-child(4),
+            .summary-section table td:nth-child(4) { width: 18% !important; } /* Project Total */
+            .summary-section table th:nth-child(5),
+            .summary-section table td:nth-child(5) { width: 14% !important; } /* Percentage */
+
+            /* Ensure total row text color is black and follows alignment */
             .summary-section .total-row td > div {
                 color: #000 !important; /* Ensure total text is black */
+                font-weight: bold !important; /* Keep bold for totals */
             }
             
             /* Specific fix for Project Name display in print */
