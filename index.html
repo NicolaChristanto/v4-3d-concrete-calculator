@@ -537,23 +537,35 @@
             }
 
             /* Apply explicit widths to table cells directly for print */
-            .summary-section table th:nth-child(1),
-            .summary-section table td:nth-child(1) { width: 18% !important; } /* Category */
-            .summary-section table th:nth-child(2),
-            .summary-section table td:nth-child(2) { width: 32% !important; } /* Description */
-            .summary-section table th:nth-child(3),
-            .summary-section table td:nth-child(3) { width: 18% !important; } /* Cost per m³ */
-            .summary-section table th:nth-child(4),
-            .summary-section table td:nth-child(4) { width: 18% !important; } /* Project Total */
-            .summary-section table th:nth-child(5),
-            .summary-section table td:nth-child(5) { width: 14% !important; } /* Percentage */
+            /* Removed this block, relying on table-layout: fixed and the th widths set directly for print */
+            /* This is a crucial change to avoid potential conflicts with browser print engines */
+
+            /* Re-applying widths more directly for print to the th elements, and letting td inherit */
+            .summary-section table th:nth-child(1) { width: 18% !important; } /* Category */
+            .summary-section table th:nth-child(2) { width: 32% !important; } /* Description */
+            .summary-section table th:nth-child(3) { width: 18% !important; } /* Cost per m³ */
+            .summary-section table th:nth-child(4) { width: 18% !important; } /* Project Total */
+            .summary-section table th:nth-child(5) { width: 14% !important; } /* Percentage */
+
+            /* Now applying text-align directly to td for print as well */
+            .summary-section table td:nth-child(1) { text-align: left !important; } /* Category */
+            .summary-section table td:nth-child(2) { text-align: left !important; } /* Description */
+            .summary-section table td:nth-child(3) { text-align: right !important; } /* Cost per m³ */
+            .summary-section table td:nth-child(4) { text-align: right !important; } /* Project Total */
+            .summary-section table td:nth-child(5) { text-align: right !important; } /* Percentage */
+
 
             /* Ensure total row text color is black and follows alignment */
-            .summary-section .total-row td > div {
+            .summary-section .total-row td {
                 color: #000 !important; /* Ensure total text is black */
                 font-weight: bold !important; /* Keep bold for totals */
             }
-            
+            /* The div within total-row td should also follow the td's text-align now */
+            .summary-section .total-row td > div {
+                text-align: inherit !important; /* Inherit text alignment from parent td */
+            }
+
+
             /* Specific fix for Project Name display in print */
             .print-only-project-name {
                 display: block !important; /* Show for print */
